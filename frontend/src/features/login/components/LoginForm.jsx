@@ -16,14 +16,15 @@ export default function LoginForm() {
       setError("Please use a valid McGill email address.");
       return;
     }
-    
+
     const res = await Login(email, password);
 
     if (res.status === 401) {
       setError("Invalid credentials. Please try again.");
     } else if (res.status === 200) {
+      const data = await res.json();
+      localStorage.setItem("token", data.token);
       setError("");
-      await res.json();
       navigate("/");
     }
   };

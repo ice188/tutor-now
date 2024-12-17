@@ -1,6 +1,4 @@
-
-
-export default function Header() {
+export default function PublicHeader() {
   return (
     <header className="bg-white">
       <nav
@@ -10,11 +8,7 @@ export default function Header() {
         <div className="flex lg:flex-1">
           <a href="/" className="-m-1.5">
             <span className="sr-only">Tutor Now</span>
-            <img
-              alt=""
-              src="/logo.png"
-              className="h-16 w-auto"
-            />
+            <img alt="logo" src="/logo.png" className="h-16 w-auto" />
           </a>
         </div>
       </nav>

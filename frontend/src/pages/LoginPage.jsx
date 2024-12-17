@@ -1,10 +1,10 @@
-import Header from "../components/Header";
+import PublicHeader from "../components/PublicHeader";
 import LoginForm from "../features/login/components/LoginForm";
 
 export const LoginPage = () => {
   return (
     <>
-      <Header />
+      <PublicHeader/>
       <LoginForm />
     </>
   );

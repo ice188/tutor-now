@@ -26,7 +26,7 @@ export default function RequestForm() {
     <div className="h-full">
       <div className="flex min-h-full flex-1 flex-col justify-center px-16 py-4 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 mb-4 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+          <h2 className="mt-10 mb-4 text-center text-blue-950 text-2xl/9 font-bold tracking-tight text-gray-900">
             Request Availability from a Tutor
           </h2>
         </div>
@@ -96,7 +96,7 @@ export default function RequestForm() {
         <div>
           <button
             type="submit"
-            onClick={handleSubmit} // Handle button click to display message
+            onClick={handleSubmit} 
             className="mt-4 flex w-1/3 justify-center rounded-md bg-blue-950 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900"
           >
             Send Availability Request
