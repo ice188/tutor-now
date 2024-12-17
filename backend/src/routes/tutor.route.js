@@ -25,4 +25,14 @@ router.get(
     res.json({ message: "Tutor obtained", tutors: tutors.rows });
   })
 );
+
+//3. get tutor by id
+router.get(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const tutor = await pool.query("SELECT * FROM tutors WHERE tutor_id=$1",[id]);
+    res.json({ message: "Tutor obtained", tutor: tutor.rows[0] });
+  })
+);
 module.exports = router;

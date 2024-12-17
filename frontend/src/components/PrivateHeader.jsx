@@ -1,4 +1,7 @@
 export default function PrivateHeader() {
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+  }
   return (
     <header className="bg-white">
       <nav
@@ -38,12 +41,12 @@ export default function PrivateHeader() {
           >
             All Appointments
           </a>
-          <a
-            href="/logout"
-            className="text-sm text-white bg-blue-950 px-4 py-2 font-semibold text-red-600 hover:bg-blue-700"
+          <button
+            onClick={handleLogout}
+            className="text-sm text-white bg-blue-950 px-5 py-2 font-semibold text-red-600 hover:bg-blue-700"
           >
             Logout
-          </a>
+          </button>
         </div>
       </nav>
     </header>
