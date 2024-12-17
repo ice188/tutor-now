@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Register } from "../api/register";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -21,6 +23,7 @@ export default function RegisterForm() {
       setError("Account exists. ");
     } else if (res.status === 200) {
       setError("");
+      navigate("/");
     }
   };
 
