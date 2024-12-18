@@ -57,8 +57,8 @@ export default function PublicHeader() {
             </a>
           </div>
         )}
-        {!isLoginPage && token && (
-          <div className="flex">
+        {!isLoginPage && token && user && (
+          <div className="flex items-center">
             <div className="mr-8">
               <a
                 href= {`${user.user_id}/dashboard`}

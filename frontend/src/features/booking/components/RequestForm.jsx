@@ -130,6 +130,6 @@ export default function RequestForm() {
       </div>
     </div>
   ) : (
-    <div className="text-center pt-12">Authentication status changed. Please log in again.</div>
+    <div className="text-center pt-12">Access Denied.</div>
   );;
 }
