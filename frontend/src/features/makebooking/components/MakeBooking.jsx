@@ -76,7 +76,7 @@ const MakeBookingPage = () => {
 
       // Generate shareable URL
       const hostUrl = import.meta.env.VITE_HOST_URL
-      const url = `${hostUrl}/reserve-booking/${tid}`;
+      const url = `${hostUrl}/reserve-booking/${result.tutorial.tutorial_id}`;
       setShareableUrl(url);
 
       setFormData({
