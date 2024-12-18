@@ -79,7 +79,7 @@ export default function PublicHeader() {
             <div className="flex items-center">
               <div className="mr-8">
                 <a
-                  href={`make-booking`}
+                  href={`/${tutor.tutor_id}/make-booking`}
                   className="text-sm text-blue-950 text-decoration-line: underline px-5 py-3 font-semibold hover:text-blue-700"
                 >
                   Create a Tutoring Session
@@ -109,11 +109,11 @@ export default function PublicHeader() {
         {!isLoginPage &&
           token &&
           user &&
-          !tutorToken(
+          !tutorToken && (
             <div className="flex items-center">
               <div className="mr-8">
                 <a
-                  href={`${user.user_id}/dashboard`}
+                  href={`/${user.user_id}/dashboard`}
                   className="text-sm text-white bg-blue-950 px-5 py-3 font-semibold hover:bg-blue-700"
                 >
                   Dashboard

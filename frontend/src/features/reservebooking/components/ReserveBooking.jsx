@@ -5,6 +5,7 @@ import { GetCourseById } from "../api/getCourseById";
 import { GetTutorById } from "../api/getTutorById";
 
 export default function TutorialDetails() {
+  
   const { id } = useParams(); // Get the tutorial ID from the URL
   const [tutorial, setTutorial] = useState(null);
   const [course, setCourse] = useState(null);

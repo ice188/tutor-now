@@ -56,7 +56,6 @@ const MakeBookingPage = () => {
       frequency: formData.recurring,
     };
   
-    console.log(dataToSubmit);
     try {
       const result = await addTutorial(dataToSubmit);
       alert(result.message || "Tutorial added successfully!");
