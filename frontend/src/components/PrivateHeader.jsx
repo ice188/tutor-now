@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 export default function PrivateHeader() {
   
   const navigate = useNavigate();
-  
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -15,7 +14,7 @@ export default function PrivateHeader() {
     <header className="bg-white">
       <nav
         aria-label="Global"
-        className="mx-auto border-b shadow-md flex max-w-7xl pr-16 items-center justify-between p-3 pl-8 lg:px-8"
+        className="mx-auto border-b shadow-md flex pr-16 items-center justify-between p-3 pl-8 lg:px-8"
       >
         <div className="flex lg:flex-1 items-center justify-center">
           <a href="/" className="-m-1.5">

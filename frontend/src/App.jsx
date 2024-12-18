@@ -4,7 +4,7 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { AvailabilityRequestPage } from "./pages/AvailabilityRequestPage";
 import { LandingPage } from "./pages/LandingPage";
 import { TutorialSessionPage } from "./pages/TutorialSessionPage";
-import { DashboardPage } from "./pages/TutorialSessionPage";
+import { DashboardPage } from "./pages/DashboardPage";
 
 const App = () => {
   return (

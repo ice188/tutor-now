@@ -87,7 +87,7 @@ export default function CourseList() {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="mt-2 py-2 flex w-1/3 justify-center rounded-md bg-blue-950 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900"
+            className="mt-2 py-2 flex w-1/3 justify-center bg-blue-950 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900"
           >
             See all available tutoring sessions
           </button>

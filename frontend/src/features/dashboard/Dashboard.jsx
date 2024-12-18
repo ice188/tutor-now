@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -19,9 +18,7 @@ const Dashboard = () => {
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <button style={buttonStyle} onClick={() => navigate("/time-request")}>
-        Create a Booking
-      </button>
+      
       <button style={buttonStyle} onClick={() => navigate("/time-request")}>
         Request Availability
       </button>
