@@ -56,6 +56,7 @@ export default function TutorialList() {
         <div className="space-y-4">
           {tutorialById.length > 0 && course ? (
             tutorialById.map((tutorial) => (
+              
               <div
                 key={tutorial.tutorial_id}
                 className={`border p-4 rounded-md shadow-sm cursor-pointer hover:shadow-lg transition-all ${

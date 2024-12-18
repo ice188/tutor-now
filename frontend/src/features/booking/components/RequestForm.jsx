@@ -35,6 +35,7 @@ export default function RequestForm() {
       try {
       const { user } = await LoginStatus();
       setUser(user);
+      console.log(user.user_id);
     }catch(e){
       setUser(null);
       console.log(e);
