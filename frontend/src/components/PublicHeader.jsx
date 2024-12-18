@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginStatus } from "../features/login/api/loginStatus";
-import { TutorLoginStatus } from "../features/tutor-portal/api/TutorLoginStatus";
+import { TutorLoginStatus } from "../features/tutor-portal/api/tutorLoginStatus";
 
 export default function PublicHeader() {
   const [isLoginPage, setIsLoginPage] = useState(false);

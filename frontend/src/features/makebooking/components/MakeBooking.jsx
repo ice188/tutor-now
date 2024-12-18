@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { addTutorial } from "../api/addTutorial";
 import { GetCourses } from "../api/getCourses"; // Reuse the existing API function
 import { useParams } from "react-router-dom";
-import { TutorLoginStatus } from "../../tutor-portal/api/TutorLoginStatus";
+import { TutorLoginStatus } from "../../tutor-portal/api/tutorLoginStatus";
 const tutorToken = localStorage.getItem("tutor-token");
 
 const MakeBookingPage = () => {
