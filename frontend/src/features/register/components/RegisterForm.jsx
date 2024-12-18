@@ -23,7 +23,7 @@ export default function RegisterForm() {
       setError("Account exists. ");
     } else if (res.status === 200) {
       setError("");
-      navigate("/");
+      navigate("/login");
     }
   };
 

@@ -7,11 +7,11 @@ const asyncHandler = require("express-async-handler");
 router.post(
   "/",
   asyncHandler(async (req, res) => {
-    let { location, tid, cid, capacity, spots, time, tutor_date } = req.body;
+    let { location, tid, cid, capacity, spots, time, tutor_date, frequency } = req.body;
 
     const newTutorial = await pool.query(
-      "INSERT INTO tutorials (tutoring_location, tutor_id, course_id, capacity, spots_remaining, session_time, tutor_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-      [location, tid, cid, capacity, spots, time, tutor_date]
+      "INSERT INTO tutorials (tutoring_location, tutor_id, course_id, capacity, spots_remaining, session_time, tutor_date, frequency) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      [location, tid, cid, capacity, spots, time, tutor_date, frequency]
     );
     res.json({ message: "Tutorial added", tutorial: newTutorial.rows[0] });
   })

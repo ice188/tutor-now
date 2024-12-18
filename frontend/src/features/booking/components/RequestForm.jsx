@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Label,
   Listbox,
@@ -9,20 +9,41 @@ import {
 import { ChevronUpDownIcon } from "@heroicons/react/16/solid";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { GetTutors } from "../api/getTutors";
+import { useParams } from "react-router-dom";
+import { LoginStatus } from "../../login/api/loginStatus";
 
 const tutors = await GetTutors();
 
 export default function RequestForm() {
+  const { uid } = useParams();
+  const [user, setUser] = useState(null);
   const [selected, setSelected] = useState(tutors[1]);
   const [requestMessage, setRequestMessage] = useState("");
+  const token = localStorage.getItem("token");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate sending the request
     setRequestMessage("We've sent your request. Please wait for tutor to respond.");
   };
 
-  return (
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    const loadAuth = async () => {
+      try {
+      const { user } = await LoginStatus();
+      setUser(user);
+    }catch(e){
+      setUser(null);
+      console.log(e);
+    }
+    };
+    loadAuth();
+  }, [token]);
+
+  return user && uid === user.user_id ? (
     <div className="h-full">
       <div className="flex min-h-full flex-1 flex-col justify-center px-16 py-4 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -107,5 +128,7 @@ export default function RequestForm() {
         </div>
       </div>
     </div>
-  );
+  ) : (
+    <div className="text-center pt-12">Authentication status changed. Please log in again.</div>
+  );;
 }

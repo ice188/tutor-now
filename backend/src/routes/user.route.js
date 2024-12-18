@@ -58,14 +58,14 @@ router.get("/status", async (req, res) => {
   if (!token) {
     return res.json({ isLoggedIn: false });
   }
-  const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  const decoded = jwt.verify(token, "secret");
   const user = await pool.query("SELECT * FROM users WHERE user_id = $1", [
     decoded.user_id,
   ]);
   if (user.rows.length > 0) {
     res.json({ isLoggedIn: true, user: user.rows[0] });
   } else {
-    res.json({ isLoggedIn: false });
+    res.json({ isLoggedIn: false, user: null });
   }
 });
 
