@@ -1,28 +1,26 @@
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-
-  const navigate = useNavigate(); 
-
-  const buttonStyle = {
-    backgroundColor: "#0A2A3A",
-    color: "#fff",
-    border: "none",
-    padding: "20px",
-    margin: "10px",
-    width: "300px",
-    fontSize: "18px",
-    cursor: "pointer",
-    textAlign: "center",
-  };
+  const navigate = useNavigate();
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      
-      <button style={buttonStyle} onClick={() => navigate("/time-request")}>
+    <div
+      style={{
+        textAlign: "center",
+        marginTop: "50px",
+      }}
+      className="flex flex-col items-center space-y-4" // Vertical spacing between buttons
+    >
+      <button
+        className="bg-blue-950 text-white px-5 py-3 font-semibold rounded-md cursor-pointer hover:bg-blue-700 w-80" // Width set to 80 (tailwind's w-80)
+        onClick={() => navigate("/time-request")}
+      >
         Request Availability
       </button>
-      <button style={buttonStyle} onClick={() => navigate("/time-request")}>
+      <button
+        className="bg-blue-950 text-white px-5 py-3 font-semibold rounded-md cursor-pointer hover:bg-blue-700 w-80" // Width set to 80 (tailwind's w-80)
+        onClick={() => navigate("/time-request")}
+      >
         View Appointments
       </button>
     </div>

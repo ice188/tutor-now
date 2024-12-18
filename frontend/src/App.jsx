@@ -5,6 +5,8 @@ import { AvailabilityRequestPage } from "./pages/AvailabilityRequestPage";
 import { LandingPage } from "./pages/LandingPage";
 import { TutorialSessionPage } from "./pages/TutorialSessionPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { MakeBookingPage } from "./pages/MakeBookingPage";
+import { ReserveBookingPage } from "./pages/ReserveBookingPage";
 
 const App = () => {
   return (
@@ -17,6 +19,8 @@ const App = () => {
         <Route path="/:uid/availability-request" element={<AvailabilityRequestPage />} />
         <Route path="/tutorial-sessions-for-course/:id" element={<TutorialSessionPage />} />
         <Route path="/dashboard" element= {<DashboardPage />} />
+        <Route path="/make-booking" element= {<MakeBookingPage />} />
+        <Route path="/reserve-booking/:id" element= {<ReserveBookingPage />} />
       </Routes>
     </Router>
   );
