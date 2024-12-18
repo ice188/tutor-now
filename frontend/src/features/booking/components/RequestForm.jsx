@@ -35,7 +35,7 @@ export default function RequestForm() {
       try {
       const { user } = await LoginStatus();
       setUser(user);
-      console.log(user.user_id);
+
     }catch(e){
       setUser(null);
       console.log(e);
@@ -44,7 +44,7 @@ export default function RequestForm() {
     loadAuth();
   }, [token]);
 
-  return user && uid === user.user_id ? (
+  return user && uid === user.user_id.toString() ? (
     <div className="h-full">
       <div className="flex min-h-full flex-1 flex-col justify-center px-16 py-4 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">

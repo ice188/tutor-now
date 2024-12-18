@@ -31,12 +31,7 @@ export default function PrivateHeader() {
           >
             Dashboard
           </a>
-          <a
-            href="/create-booking"
-            className="text-sm font-semibold text-blue-950 hover:text-blue-700"
-          >
-            Create Booking
-          </a>
+          
           <a
             href="/availability-request"
             className="text-sm font-semibold text-blue-950 hover:text-blue-700"
