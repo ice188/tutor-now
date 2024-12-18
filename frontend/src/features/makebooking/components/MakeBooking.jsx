@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { addTutorial } from "../api/addTutorial";
 import { GetCourses } from "../api/getCourses"; // Reuse the existing API function
 import { useParams } from "react-router-dom";
-
-
+import { TutorLoginStatus } from "../../tutor-portal/api/TutorLoginStatus";
+const tutorToken = localStorage.getItem("tutor-token");
 
 const MakeBookingPage = () => {
   const { tid } = useParams();
+  const [ttutor, setTtutor] = useState(null);
   const [formData, setFormData] = useState({
     tutoring_location: "",
     tutor_id: tid,
@@ -14,9 +15,23 @@ const MakeBookingPage = () => {
     capacity: "",
     tutorial_date: "",
     session_time_start: "", // Start time
-    session_time_end: "",   // End time
+    session_time_end: "", // End time
     recurring: "one-time", // Default value
   });
+
+  useEffect(() => {
+    if (!tutorToken) {
+      return;
+    }
+
+    const loadAuth = async () => {
+      const { tutor } = await TutorLoginStatus();
+      
+      setTtutor(tutor);
+    };
+    loadAuth();
+    console.log(ttutor);
+  }, []);
 
   const [courses, setCourses] = useState([]); // Store fetched courses
 
@@ -40,10 +55,10 @@ const MakeBookingPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Combine start and end times into a single range
     const session_time = `${formData.session_time_start}-${formData.session_time_end}`;
-  
+
     // Prepare the payload
     const dataToSubmit = {
       location: formData.tutoring_location,
@@ -55,7 +70,7 @@ const MakeBookingPage = () => {
       time: session_time,
       frequency: formData.recurring,
     };
-  
+
     try {
       const result = await addTutorial(dataToSubmit);
       alert(result.message || "Tutorial added successfully!");
@@ -73,7 +88,6 @@ const MakeBookingPage = () => {
       alert("Failed to add tutorial. Please try again.");
     }
   };
-  
 
   const formStyle = {
     backgroundColor: "#F9FAFB",
@@ -93,8 +107,7 @@ const MakeBookingPage = () => {
     border: "1px solid #D1D5DB",
   };
 
-
-  return (
+  return (ttutor && ttutor.tutor_id.toString() === tid.toString()) ? (
     <div style={{ padding: "20px" }}>
       <h2 style={{ textAlign: "center", color: "#0A2A3A" }}>Add a Tutorial</h2>
       <form style={formStyle} onSubmit={handleSubmit}>
@@ -176,11 +189,16 @@ const MakeBookingPage = () => {
           <option value="recurring">Recurring</option>
         </select>
 
-        <button type="submit" className="bg-blue-950 text-white px-5 py-3 font-semibold rounded-md cursor-pointer hover:bg-blue-700">
+        <button
+          type="submit"
+          className="bg-blue-950 text-white px-5 py-3 font-semibold rounded-md cursor-pointer hover:bg-blue-700"
+        >
           Add Tutorial
         </button>
       </form>
     </div>
+  ) : (
+    <div className="text-center pt-12">Access Denied.</div>
   );
 };
 

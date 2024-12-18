@@ -70,6 +70,7 @@ router.get("/auth/status", async (req, res) => {
     return res.json({ isLoggedIn: false, tutor: null });
   }
   const decoded = jwt.verify(token, "tutor-secret");
+ 
   const tutor = await pool.query("SELECT * FROM tutors WHERE tutor_id = $1", [
     decoded.tutor_id,
   ]);
