@@ -7,6 +7,7 @@ import { TutorialSessionPage } from "./pages/TutorialSessionPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { MakeBookingPage } from "./pages/MakeBookingPage";
 import { ReserveBookingPage } from "./pages/ReserveBookingPage";
+import { TutorLoginPage } from "./pages/TutorLoginPage";
 
 const App = () => {
   return (
@@ -19,8 +20,9 @@ const App = () => {
         <Route path="/:uid/availability-request" element={<AvailabilityRequestPage />} />
         <Route path="/tutorial-sessions-for-course/:id" element={<TutorialSessionPage />} />
         <Route path="/:uid/dashboard" element= {<DashboardPage />} />
-        <Route path="/make-booking" element= {<MakeBookingPage />} />
+        <Route path="/:tid/make-booking" element= {<MakeBookingPage />} />
         <Route path="/reserve-booking/:id" element= {<ReserveBookingPage />} />
+        <Route path="/tutor-login" element= {<TutorLoginPage />} />
       </Routes>
     </Router>
   );

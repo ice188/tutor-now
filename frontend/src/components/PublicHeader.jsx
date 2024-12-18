@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginStatus } from "../features/login/api/loginStatus";
+import { TutorLoginStatus } from "../features/tutor-portal/api/TutorLoginStatus";
 
 export default function PublicHeader() {
   const [isLoginPage, setIsLoginPage] = useState(false);
   const [user, setUser] = useState(null);
+  const [tutor, setTutor] = useState(null);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsLoginPage(window.location.pathname === "/login");
@@ -12,8 +15,17 @@ export default function PublicHeader() {
   }, []);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const tutorToken = localStorage.getItem("tutor-token");
+
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setUser(null);
+    navigate("/");
+  };
+
+  const handleTutorLogout = () => {
+    localStorage.removeItem("tutor-token");
+    setTutor(null);
     navigate("/");
   };
 
@@ -23,17 +35,23 @@ export default function PublicHeader() {
     }
 
     const loadAuth = async () => {
-      try {
       const { user } = await LoginStatus();
-      setUser(user);
 
-    }catch(e){
-      setUser(null);
-      console.log(e);
-    }
+      setUser(user);
     };
     loadAuth();
   }, [token]);
+
+  useEffect(() => {
+    if (!tutorToken) {
+      return;
+    }
+    const loadAuth = async () => {
+      const { tutor } = await TutorLoginStatus();
+      setTutor(tutor);
+    };
+    loadAuth();
+  }, [tutorToken]);
   return (
     <header className="bg-white">
       <nav
@@ -46,37 +64,71 @@ export default function PublicHeader() {
             <img alt="logo" src="/logo.png" className="h-16 w-auto" />
           </a>
         </div>
-
-        {!isLoginPage && !token && (
-          <div className="mr-8">
-            <a
-              href="/login"
-              className="text-sm text-white bg-blue-950 px-5 py-3 font-semibold hover:bg-blue-700"
-            >
-              Login
-            </a>
-          </div>
-        )}
-        {!isLoginPage && token && user && (
-          <div className="flex items-center">
+        <div className="flex justify-end items-end">
+          {!isLoginPage && !token && !tutorToken && (
             <div className="mr-8">
               <a
-                href= {`${user.user_id}/dashboard`}
-                className="text-sm text-white bg-blue-950 px-5 py-3 font-semibold hover:bg-blue-700"
+                href="/tutor-login"
+                className="text-sm text-blue-950 text-decoration-line: underline px-5 py-3 font-semibold hover:text-blue-600"
               >
-                Dashboard
+                Tutor portal
               </a>
             </div>
+          )}
+          {tutorToken && tutor && !token && (
+            <div className="flex items-center">
+              <div className="mr-8">
+                <a
+                  href={`make-booking`}
+                  className="text-sm text-blue-950 text-decoration-line: underline px-5 py-3 font-semibold hover:text-blue-700"
+                >
+                  Create a Tutoring Session
+                </a>
+              </div>
+              <div className="mr-8">
+                <button
+                  onClick={handleTutorLogout}
+                  className="text-sm text-white bg-blue-950 px-5 py-3 font-semibold hover:bg-blue-700"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
+          {!isLoginPage && !token && !tutorToken && (
             <div className="mr-8">
-              <button
-                onClick={handleLogout}
+              <a
+                href="/login"
                 className="text-sm text-white bg-blue-950 px-5 py-3 font-semibold hover:bg-blue-700"
               >
-                Logout
-              </button>
+                User Login
+              </a>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        {!isLoginPage &&
+          token &&
+          user &&
+          !tutorToken(
+            <div className="flex items-center">
+              <div className="mr-8">
+                <a
+                  href={`${user.user_id}/dashboard`}
+                  className="text-sm text-white bg-blue-950 px-5 py-3 font-semibold hover:bg-blue-700"
+                >
+                  Dashboard
+                </a>
+              </div>
+              <div className="mr-8">
+                <button
+                  onClick={handleLogout}
+                  className="text-sm text-white bg-blue-950 px-5 py-3 font-semibold hover:bg-blue-700"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
       </nav>
     </header>
   );

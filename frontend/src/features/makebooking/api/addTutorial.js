@@ -1,6 +1,7 @@
 export const addTutorial = async (tutorialData) => {
   try {
-    const response = await fetch("http://localhost:5000/api/tutorials", {
+    console.log(JSON.stringify(tutorialData));
+    const response = await fetch("http://localhost:5000/api/tutorial", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

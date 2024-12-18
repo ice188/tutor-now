@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { addTutorial } from "../api/addTutorial";
 import { GetCourses } from "../api/getCourses"; // Reuse the existing API function
+import { useParams } from "react-router-dom";
 
 
 
 const MakeBookingPage = () => {
+  const { tid } = useParams();
   const [formData, setFormData] = useState({
     tutoring_location: "",
-    tutor_id: "",
+    tutor_id: tid,
     course_id: "", // Set from dropdown
     capacity: "",
     tutorial_date: "",
@@ -44,22 +46,22 @@ const MakeBookingPage = () => {
   
     // Prepare the payload
     const dataToSubmit = {
-      tutoring_location: formData.tutoring_location,
-      tutor_id: parseInt(formData.tutor_id), // Ensure numeric fields are integers
-      course_id: parseInt(formData.course_id),
+      location: formData.tutoring_location,
+      tid: tid,
+      cid: parseInt(formData.course_id),
       capacity: parseInt(formData.capacity),
-      spots_remaining: parseInt(formData.capacity), // Match spots_remaining to capacity
+      spots: parseInt(formData.capacity), // Match spots_remaining to capacity
       tutor_date: formData.tutorial_date, // Ensure field names match the database
-      session_time,
-      recurring: formData.recurring,
+      time: session_time,
+      frequency: formData.recurring,
     };
   
+    console.log(dataToSubmit);
     try {
       const result = await addTutorial(dataToSubmit);
       alert(result.message || "Tutorial added successfully!");
       setFormData({
         tutoring_location: "",
-        tutor_id: "",
         course_id: "",
         capacity: "",
         tutorial_date: "",
@@ -68,6 +70,7 @@ const MakeBookingPage = () => {
         recurring: "one-time",
       });
     } catch (error) {
+      console.log(error);
       alert("Failed to add tutorial. Please try again.");
     }
   };
@@ -91,15 +94,6 @@ const MakeBookingPage = () => {
     border: "1px solid #D1D5DB",
   };
 
-  const buttonStyle = {
-    backgroundColor: "#0A2A3A",
-    color: "#fff",
-    border: "none",
-    padding: "10px 20px",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "16px",
-  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -110,16 +104,6 @@ const MakeBookingPage = () => {
           type="text"
           name="tutoring_location"
           value={formData.tutoring_location}
-          onChange={handleInputChange}
-          style={inputStyle}
-          required
-        />
-
-        <label>Tutor ID:</label>
-        <input
-          type="number"
-          name="tutor_id"
-          value={formData.tutor_id}
           onChange={handleInputChange}
           style={inputStyle}
           required
