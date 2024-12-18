@@ -3,7 +3,10 @@ import { addTutorial } from "../api/addTutorial";
 import { GetCourses } from "../api/getCourses"; // Reuse the existing API function
 import { useParams } from "react-router-dom";
 import { TutorLoginStatus } from "../../tutor-portal/api/TutorLoginStatus";
+import CryptoJS from "crypto-js";
+
 const tutorToken = localStorage.getItem("tutor-token");
+
 
 const MakeBookingPage = () => {
   const { tid } = useParams();
@@ -48,6 +51,12 @@ const MakeBookingPage = () => {
     fetchCourses();
   }, []);
 
+  const encodeId = (id) => {
+    const key = "secret-key";
+    const idString = id.toString(); // Convert the ID to a string
+    return CryptoJS.AES.encrypt(idString, key).toString();
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -75,8 +84,10 @@ const MakeBookingPage = () => {
       alert(result.message || "Tutorial added successfully!");
 
       // Generate shareable URL
-      const hostUrl = import.meta.env.VITE_HOST_URL
-      const url = `${hostUrl}/reserve-booking/${result.tutorial.tutorial_id}`;
+      const encodedId = encodeId(result.tutorial.tutorial_id);
+      const hostUrl = import.meta.env.VITE_HOST_URL;
+      const url = `${hostUrl}/reserve-booking/${encodeURIComponent(encodedId)}`;
+
       setShareableUrl(url);
 
       setFormData({

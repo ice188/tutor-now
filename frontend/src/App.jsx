@@ -21,7 +21,7 @@ const App = () => {
         <Route path="/tutorial-sessions-for-course/:id" element={<TutorialSessionPage />} />
         <Route path="/:uid/dashboard" element= {<DashboardPage />} />
         <Route path="/:tid/make-booking" element= {<MakeBookingPage />} />
-        <Route path="/reserve-booking/:id" element= {<ReserveBookingPage />} />
+        <Route path="/reserve-booking/:encodedId" element= {<ReserveBookingPage />} />
         <Route path="/tutor-login" element= {<TutorLoginPage />} />
       </Routes>
     </Router>

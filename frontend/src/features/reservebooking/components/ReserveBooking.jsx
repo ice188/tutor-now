@@ -3,20 +3,60 @@ import { useNavigate, useParams } from "react-router-dom";
 import { GetTutorialsById } from "../api/getTutorialsById";
 import { GetCourseById } from "../api/getCourseById";
 import { GetTutorById } from "../api/getTutorById";
+import CryptoJS from "crypto-js";
 
 export default function TutorialDetails() {
-  
-  const { id } = useParams(); // Get the tutorial ID from the URL
+  const { encodedId } = useParams(); // Get the encrypted tutorial ID from the URL
+  const decodedId = decodeURIComponent(encodedId); // Decode the URL-encoded ID
   const [tutorial, setTutorial] = useState(null);
   const [course, setCourse] = useState(null);
   const [tutor, setTutor] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch tutorial, course, and tutor details based on tutorial ID
+  // Decrypt the tutorial ID from the URL
+  const decryptId = (encryptedId) => {
+    const key = "secret-key"; // Use the same key as in encryption
+    try {
+      const bytes = CryptoJS.AES.decrypt(encryptedId, key);
+      const decryptedId = bytes.toString(CryptoJS.enc.Utf8);
+      if (!decryptedId) {
+        throw new Error("Failed to decrypt ID");
+      }
+      return decryptedId;
+    } catch (error) {
+      console.error("Error during decryption:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
+    console.log("Encoded ID from URL:", encodedId);
+    const decryptedId = decryptId(decodedId); // Decrypt the tutorial ID
+    console.log("Decrypted ID:", decryptedId); // Log the decrypted ID
+  
+    if (!decryptedId) {
+      console.error("Invalid or failed to decrypt tutorial ID.");
+      return;
+    }
+  
+    // Clean the decrypted ID: trim spaces and ensure it's an integer
+    const tutorialId = parseInt(decryptedId.trim(), 10);
+    if (isNaN(tutorialId)) {
+      console.error("Decrypted ID is not a valid number.");
+      return;
+    }
+  
+    console.log("Fetching tutorial with ID:", tutorialId);
+  
     const fetchTutorialDetails = async () => {
       try {
-        const fetchedTutorial = await GetTutorialsById(id);
+        const fetchedTutorial = await GetTutorialsById(tutorialId); // Use the integer ID
+        console.log("Fetched tutorial:", fetchedTutorial); // Log the fetched tutorial data
+  
+        if (fetchedTutorial.length === 0) {
+          console.error("Tutorial not found.");
+          return;
+        }
         setTutorial(fetchedTutorial[0]); // Assuming the tutorial is the first item in the array
         const fetchedCourse = await GetCourseById(fetchedTutorial[0].course_id);
         setCourse(fetchedCourse);
@@ -26,10 +66,10 @@ export default function TutorialDetails() {
         console.error("Error fetching tutorial details:", error);
       }
     };
-
+  
     fetchTutorialDetails();
-  }, [id]);
-
+  }, [decodedId]); // Run this effect when the decodedId changes
+  
   const handleConfirmReservation = () => {
     if (tutorial) {
       alert(`You have confirmed a reservation for the tutorial: ${tutorial.tutorial_id}`);
