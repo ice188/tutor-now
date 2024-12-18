@@ -4,6 +4,7 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { AvailabilityRequestPage } from "./pages/AvailabilityRequestPage";
 import { LandingPage } from "./pages/LandingPage";
 import { TutorialSessionPage } from "./pages/TutorialSessionPage";
+import { DashboardPage } from "./pages/TutorialSessionPage";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/:uid/availability-request" element={<AvailabilityRequestPage />} />
         <Route path="/tutorial-sessions-for-course/:id" element={<TutorialSessionPage />} />
+        <Route path="/dashboard" element= {<DashboardPage />} />
       </Routes>
     </Router>
   );
