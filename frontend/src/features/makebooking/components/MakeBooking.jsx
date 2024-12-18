@@ -30,7 +30,6 @@ const MakeBookingPage = () => {
       setTtutor(tutor);
     };
     loadAuth();
-    console.log(ttutor);
   }, []);
 
   const [courses, setCourses] = useState([]); // Store fetched courses

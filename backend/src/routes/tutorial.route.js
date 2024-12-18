@@ -40,4 +40,29 @@ router.get(
   })
 );
 
+//4. minus capacity by 1
+router.put(
+  "/:id/decrement-capacity",
+  asyncHandler(async (req, res) => {
+    const { id } = req.params; 
+    try {
+      const updatedTutorial = await pool.query(
+        "UPDATE tutorials SET spots_remaining = GREATEST(spots_remaining - 1, 0) WHERE id = $1 RETURNING *",
+        [id]
+      );
+
+      if (updatedTutorial.rowCount === 0) {
+        return res.status(404).json({ message: "Tutorial not found" });
+      }
+      res.json({
+        message: "Capacity decremented successfully",
+        tutorial: updatedTutorial.rows[0],
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred", error });
+    }
+  })
+);
+
 module.exports = router;
