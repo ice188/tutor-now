@@ -18,6 +18,7 @@ const MakeBookingPage = () => {
     session_time_end: "", // End time
     recurring: "one-time", // Default value
   });
+  
 
   useEffect(() => {
     if (!tutorToken) {
@@ -33,6 +34,7 @@ const MakeBookingPage = () => {
   }, []);
 
   const [courses, setCourses] = useState([]); // Store fetched courses
+  const [shareableUrl, setShareableUrl] = useState("");
 
   // Fetch courses on component mount
   useEffect(() => {
@@ -55,7 +57,7 @@ const MakeBookingPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Combine start and end times into a single range
+    // Combine start and end times intgit reset --hard f49cf3ac0a8a978980999c4f43e940f816211addo a single range
     const session_time = `${formData.session_time_start}-${formData.session_time_end}`;
 
     // Prepare the payload
@@ -64,15 +66,21 @@ const MakeBookingPage = () => {
       tid: tid,
       cid: parseInt(formData.course_id),
       capacity: parseInt(formData.capacity),
-      spots: parseInt(formData.capacity), // Match spots_remaining to capacity
-      tutor_date: formData.tutorial_date, // Ensure field names match the database
+      spots: parseInt(formData.capacity),
+      tutor_date: formData.tutorial_date,
       time: session_time,
       frequency: formData.recurring,
     };
-
     try {
       const result = await addTutorial(dataToSubmit);
       alert(result.message || "Tutorial added successfully!");
+  
+      // Generate shareable URL
+      const baseUrl = window.location.origin;
+      const tutorialId = result.tutorial_id; // Assuming the API returns the new tutorial ID
+      const url = `${baseUrl}/reserve-booking/${tutorialId}`;
+      setShareableUrl(url);
+  
       setFormData({
         tutoring_location: "",
         course_id: "",
@@ -195,6 +203,40 @@ const MakeBookingPage = () => {
           Add Tutorial
         </button>
       </form>
+
+      {shareableUrl && (
+  <div style={{ marginTop: "20px", textAlign: "center" }}>
+    <h3>Share Your Booking</h3>
+    <input
+      type="text"
+      value={shareableUrl}
+      readOnly
+      style={{
+        width: "80%",
+        padding: "10px",
+        border: "1px solid #ccc",
+        borderRadius: "4px",
+      }}
+    />
+    <button
+      onClick={() => {
+        navigator.clipboard.writeText(shareableUrl);
+        alert("URL copied to clipboard!");
+      }}
+      style={{
+        marginLeft: "10px",
+        padding: "10px 20px",
+        backgroundColor: "#0A2A3A",
+        color: "#fff",
+        border: "none",
+        borderRadius: "4px",
+        cursor: "pointer",
+      }}
+    >
+      Copy URL
+    </button>
+  </div>
+)}
     </div>
   ) : (
     <div className="text-center pt-12">Access Denied.</div>
