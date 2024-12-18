@@ -1,16 +1,33 @@
 import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import { LoginStatus } from "../features/login/api/loginStatus";
 
 export default function PrivateHeader() {
   
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const token = localStorage.getItem("token");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setUser(null);
     navigate("/");
   };
 
-  return  (
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    const loadAuth = async () => {
+      const { user } = await LoginStatus();
+
+      setUser(user);
+    };
+    loadAuth();
+  }, [token]);
+
+  return  user ? (
     <header className="bg-white">
       <nav
         aria-label="Global"
@@ -25,20 +42,20 @@ export default function PrivateHeader() {
 
         <div className="flex space-x-6 items-center">
           <a
-            href="/dashboard"
+            href={`/${user.user_id}/dashboard`}
             className="text-sm font-semibold text-blue-950 hover:text-blue-700"
           >
             Dashboard
           </a>
           
           <a
-            href="/availability-request"
+            href={`/${user.user_id}/availability-request`}
             className="text-sm font-semibold text-blue-950 hover:text-blue-700"
           >
             Availability Request
           </a>
           <a
-            href="/all-appointments"
+            href={`/${user.user_id}/all-appointments`}
             className="text-sm font-semibold text-blue-950 hover:text-blue-700"
           >
             All Appointments
@@ -52,5 +69,7 @@ export default function PrivateHeader() {
         </div>
       </nav>
     </header>
+  ) : (
+    <div className="text-center pt-12">Loading...</div>
   )
 }
