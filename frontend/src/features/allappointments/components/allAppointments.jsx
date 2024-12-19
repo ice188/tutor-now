@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { GetTutorialById } from "../api/getTutorialsById";
 import { GetCourseById } from "../api/getCourseById";
 import { GetTutorById } from "../api/getTutorById";
 import { FetchUserBookings } from "../api/fetchUserBookings";
 
-export default function UserBookedTutorials() {
+export default function AllAppointmentsPage() {
+  const { uid } = useParams(); // Access user id from the URL
   const [tutorials, setTutorials] = useState([]);
   const [courseDetails, setCourseDetails] = useState({});
   const [tutorNames, setTutorNames] = useState({});
@@ -13,7 +15,7 @@ export default function UserBookedTutorials() {
   useEffect(() => {
     const fetchBookingsAndDetails = async () => {
       try {
-        const bookings = await FetchUserBookings(); // Fetch bookings from API
+        const bookings = await FetchUserBookings(uid); // Pass uid to fetch bookings
         const tutorialDetails = [];
         const courseCache = {};
         const tutorCache = {};
@@ -44,7 +46,7 @@ export default function UserBookedTutorials() {
     };
 
     fetchBookingsAndDetails();
-  }, []);
+  }, [uid]); // Dependency on uid to refetch when it changes
 
   if (loading) {
     return <p className="text-center text-gray-500">Loading booked tutorials...</p>;
