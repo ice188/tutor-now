@@ -1,3 +1,4 @@
+//Yusuf Hamza 261089856
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; 
 import { GetTutorialByTid } from "../api/getTutorialByTid";
@@ -35,7 +36,7 @@ export default function TutorialDetails() {
     const key = "secret-key"; 
     try {
       const bytes = CryptoJS.AES.decrypt(encryptedId, key);
-      const decryptedId = bytes.toString(CryptoJS.enc.Utf8);
+      const decryptedId = bytes.toString(CryptoJS.enc.Utf8); //decrypt the url to get the tutorial ID
       if (!decryptedId) {
         throw new Error("Failed to decrypt ID");
       }
@@ -66,7 +67,7 @@ export default function TutorialDetails() {
   
     const fetchTutorialDetails = async () => {
       try {
-        const fetchedTutorial = await GetTutorialByTid(tutorialId); 
+        const fetchedTutorial = await GetTutorialByTid(tutorialId); //api call to get the tutorial information by the decrypted id
         console.log("Fetched tutorial:", fetchedTutorial); 
         
         if (fetchedTutorial.length === 0) {
@@ -98,7 +99,7 @@ export default function TutorialDetails() {
     }
   
     try {
-      await UpdateTutorialCapacity(tutorial.tutorial_id); //reduces capacity by 1
+      await UpdateTutorialCapacity(tutorial.tutorial_id); //reduces capacity by 1 api call
       await RecordReservation(user.user_id, tutorial.tutorial_id);
       alert(`You have confirmed a reservation for the tutorial: ${tutorial.tutorial_id}`);
       
@@ -113,6 +114,7 @@ export default function TutorialDetails() {
     return <p>Loading tutorial details...</p>; 
   }
 
+  // output formatting style //
   return (
     <div className="h-full">
       <div className="flex min-h-full flex-1 flex-col justify-center px-16 py-4 lg:px-8">
