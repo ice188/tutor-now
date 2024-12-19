@@ -1,11 +1,11 @@
 import PrivateHeader from "../components/PrivateHeader";
-import allAppointments from "../features/allappointments/components/allAppointments";
+import AllAppointments from "../features/allappointments/components/AllAppointments";
 
 export const AllAppointmentsPage = () => {
   return (
     <>
       <PrivateHeader />
-      <allAppointments />
+      <AllAppointments />
     </>
   );
 };

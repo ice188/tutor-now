@@ -32,7 +32,7 @@ router.get(
     );
     res.json({
       message: "Bookings obtained",
-      bookings: bookings.rows[0],
+      bookings: bookings.rows,
     });
   })
 );

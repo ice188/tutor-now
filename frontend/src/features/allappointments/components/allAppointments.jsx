@@ -4,8 +4,9 @@ import { GetTutorialsById } from "../api/getTutorialsById";
 import { GetCourseById } from "../api/getCourseById";
 import { GetTutorById } from "../api/getTutorById";
 import { FetchUserBookings } from "../api/fetchUserBookings";
+import { GetTutorialByTid } from "../api/getTutorialByTid";
 
-export default function AllAppointmentsPage() {
+export default function AllAppointments() {
   const { uid } = useParams(); 
   const [tutorials, setTutorials] = useState([]);
   const [courseDetails, setCourseDetails] = useState({});
@@ -15,26 +16,55 @@ export default function AllAppointmentsPage() {
   useEffect(() => {
     const fetchBookingsAndDetails = async () => {
       try {
-        const bookings = await FetchUserBookings(uid); 
+        console.log("Fetching bookings for user:", uid);
+        const response = await FetchUserBookings(uid);
+        const bookings = response.bookings; // Access the 'bookings' array from the response
+        console.log("Fetched Bookings:", bookings);
+    
         const tutorialDetails = [];
         const courseCache = {};
         const tutorCache = {};
-
+    
+        // Now iterate over the bookings array
         for (const booking of bookings) {
-          const tutorial = await GetTutorialsById(booking.tutorial_id);
-          tutorialDetails.push(tutorial);
-
-  
-          if (!courseCache[tutorial.course_id]) {
-            courseCache[tutorial.course_id] = await GetCourseById(tutorial.course_id);
+          console.log("Booking:", booking); // Log the booking object to check tutorial_id
+    
+          if (!booking.tutorial_id) {
+            console.error("Missing tutorial_id in booking:", booking);
+            continue; // Skip this booking if no tutorial_id is available
           }
-
-
+    
+          const tutorial = await GetTutorialByTid(booking.tutorial_id);
+          console.log("Fetched Tutorial:", tutorial);
+    
+          if (!tutorial || !tutorial.course_id || !tutorial.tutor_id) {
+            console.error("Missing tutorial details:", tutorial);
+            continue; // Skip this tutorial if required details are missing
+          }
+    
+          tutorialDetails.push(tutorial);
+    
+          if (!courseCache[tutorial.course_id]) {
+            const course = await GetCourseById(tutorial.course_id);
+            console.log("Fetched Course:", course);
+            if (course) {
+              courseCache[tutorial.course_id] = course;
+            } else {
+              console.error("Failed to fetch course with id:", tutorial.course_id);
+            }
+          }
+    
           if (!tutorCache[tutorial.tutor_id]) {
-            tutorCache[tutorial.tutor_id] = await GetTutorById(tutorial.tutor_id);
+            const tutor = await GetTutorById(tutorial.tutor_id);
+            console.log("Fetched Tutor:", tutor);
+            if (tutor) {
+              tutorCache[tutorial.tutor_id] = tutor;
+            } else {
+              console.error("Failed to fetch tutor with id:", tutorial.tutor_id);
+            }
           }
         }
-
+    
         setTutorials(tutorialDetails);
         setCourseDetails(courseCache);
         setTutorNames(tutorCache);
@@ -44,9 +74,11 @@ export default function AllAppointmentsPage() {
         setLoading(false);
       }
     };
-
+    
+    
+  
     fetchBookingsAndDetails();
-  }, [uid]); 
+  }, [uid]);
 
   if (loading) {
     return <p className="text-center text-gray-500">Loading booked tutorials...</p>;

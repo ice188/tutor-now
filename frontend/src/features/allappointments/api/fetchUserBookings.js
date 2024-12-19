@@ -1,7 +1,7 @@
 export const FetchUserBookings = async (uid) => {
   const serverUrl = import.meta.env.VITE_SERVER_API_URL;
   const token = localStorage.getItem("token");
-  const res = await fetch(`${serverUrl}/api/bookings/${uid}`, {
+  const res = await fetch(`${serverUrl}/api/booking/${uid}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -11,5 +11,5 @@ export const FetchUserBookings = async (uid) => {
   if (!res.ok) {
     throw new Error("Failed to fetch user bookings");
   }
-  return await res.json(); // Returns an array of bookings
+  return await res.json(); 
 };
