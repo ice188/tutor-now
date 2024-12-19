@@ -1,3 +1,4 @@
+//Yusuf Hamza 261089856
 import { useState, useEffect } from "react";
 import { addTutorial } from "../api/addTutorial";
 import { GetCourses } from "../api/getCourses";
@@ -19,7 +20,7 @@ const MakeBookingPage = () => {
     session_time_start: "",
     session_time_end: "",
     recurring: "one-time",
-    recurring_days: [], // Store selected days for recurring tutorials
+    recurring_days: [], 
   });
 
   const [courses, setCourses] = useState([]);
@@ -79,7 +80,7 @@ const MakeBookingPage = () => {
       cid: parseInt(formData.course_id),
       capacity: parseInt(formData.capacity),
       spots: parseInt(formData.capacity),
-      tutor_date: formData.recurring === "one-time" 
+      tutor_date: formData.recurring === "one-time" //use days of the week or date depending on whether its recurring or one-time
       ? formData.tutorial_date 
       : formData.recurring_days.join(", "),
     
@@ -88,7 +89,7 @@ const MakeBookingPage = () => {
     };
   
     try {
-      const result = await addTutorial(dataToSubmit);
+      const result = await addTutorial(dataToSubmit); //api call to add tutorial to the database
       alert(result.message || "Tutorial added successfully!");
   
       const encodedId = encodeId(result.tutorial.tutorial_id);
@@ -131,8 +132,9 @@ const MakeBookingPage = () => {
     border: "1px solid #D1D5DB",
   };
 
+  // form params and style //
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
+  
   return ttutor && ttutor.tutor_id.toString() === tid.toString() ? (
     <>
       {shareableUrl && (
