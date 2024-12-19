@@ -71,10 +71,8 @@ const MakeBookingPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Combine start and end times into a single range
     const session_time = `${formData.session_time_start}-${formData.session_time_end}`;
   
-    // Prepare the payload
     const dataToSubmit = {
       location: formData.tutoring_location,
       tid: tid,
