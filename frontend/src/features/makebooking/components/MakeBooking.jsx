@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { addTutorial } from "../api/addTutorial";
 import { GetCourses } from "../api/getCourses";
 import { useParams } from "react-router-dom";
