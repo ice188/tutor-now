@@ -22,10 +22,19 @@ export default function LoginForm() {
     if (res.status === 401) {
       setError("Invalid credentials. Please try again.");
     } else if (res.status === 200) {
+      if (localStorage.getItem("tutor-token")) {
+        localStorage.removeItem("tutor-token");
+      }
       const data = await res.json();
       localStorage.setItem("token", data.token);
       setError("");
-      navigate("/");
+      const url = sessionStorage.getItem("redirect_url");
+      console.log(url);
+      if (url) {
+        window.location.replace(url);
+      } else {
+        navigate("/");
+      }
     }
   };
 

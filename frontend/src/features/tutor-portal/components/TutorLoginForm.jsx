@@ -16,14 +16,19 @@ export default function TutorLoginForm() {
       setError("Please use a valid McGill email address.");
       return;
     }
-    if (localStorage.getItem("token")){
-        setError("Please log out of your user account before logging into the tutor portal.")
+    if (localStorage.getItem("token")) {
+      setError(
+        "Please log out of your user account before logging into the tutor portal."
+      );
     }
     const res = await TutorLogin(email, password);
 
     if (res.status === 401) {
       setError("Invalid credentials. Please try again.");
     } else if (res.status === 200) {
+      if (localStorage.getItem("token")) {
+        localStorage.removeItem("token");
+      }
       const data = await res.json();
       localStorage.setItem("tutor-token", data.token);
       setError("");
