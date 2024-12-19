@@ -12,6 +12,7 @@ export default function TutorialDetails() {
   const decodedId = decodeURIComponent(encodedId); 
   const [tutorial, setTutorial] = useState(null);
   const [course, setCourse] = useState(null);
+  const [user, setUser] = useState(null);
   const [tutor, setTutor] = useState(null);
   const token = localStorage.getItem("token");
 
