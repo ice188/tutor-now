@@ -1,7 +1,7 @@
 export const RecordReservation= async (uid, tid) => {
     const serverUrl = import.meta.env.VITE_SERVER_API_URL;
     const res = await fetch(`${serverUrl}/api/booking`, {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       }
