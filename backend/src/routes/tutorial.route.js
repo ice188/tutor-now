@@ -65,4 +65,18 @@ router.put(
   })
 );
 
+//5. get tutorials by tutorial id
+router.get(
+  "/get-by-tid/:id",
+  
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const tutorial = await pool.query(
+      "SELECT * FROM tutorials WHERE tutorial_id = $1",
+      [id]
+    );
+    res.json({ message: "Tutorial obtained", tutorial: tutorial.rows[0] });
+  })
+);
+
 module.exports = router;

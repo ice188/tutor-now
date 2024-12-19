@@ -8,5 +8,5 @@ export const GetTutorialsById = async (id) => {
     });
     const data = await res.json();
     return data.tutorials;
-  };
+};
   

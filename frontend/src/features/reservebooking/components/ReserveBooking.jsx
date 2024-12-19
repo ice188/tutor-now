@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { GetTutorialsById } from "../api/getTutorialsById";
+import { GetTutorialByTid } from "../api/getTutorialByTid";
 import { GetCourseById } from "../api/getCourseById";
 import { GetTutorById } from "../api/getTutorById";
 import CryptoJS from "crypto-js";
@@ -50,17 +50,17 @@ export default function TutorialDetails() {
   
     const fetchTutorialDetails = async () => {
       try {
-        const fetchedTutorial = await GetTutorialsById(tutorialId); // Use the integer ID
+        const fetchedTutorial = await GetTutorialByTid(tutorialId); // Use the integer ID
         console.log("Fetched tutorial:", fetchedTutorial); // Log the fetched tutorial data
   3
         if (fetchedTutorial.length === 0) {
           console.error("Tutorial not found.");
           return;
         }
-        setTutorial(fetchedTutorial[0]); // Assuming the tutorial is the first item in the array
-        const fetchedCourse = await GetCourseById(fetchedTutorial[0].course_id);
+        setTutorial(fetchedTutorial); // Assuming the tutorial is the first item in the array
+        const fetchedCourse = await GetCourseById(fetchedTutorial.course_id);
         setCourse(fetchedCourse);
-        const fetchedTutor = await GetTutorById(fetchedTutorial[0].tutor_id);
+        const fetchedTutor = await GetTutorById(fetchedTutorial.tutor_id);
         setTutor(fetchedTutor);
       } catch (error) {
         console.error("Error fetching tutorial details:", error);
