@@ -5,6 +5,7 @@ import { GetCourseById } from "../api/getCourseById";
 import { GetTutorById } from "../api/getTutorById";
 import CryptoJS from "crypto-js";
 import {UpdateTutorialCapacity} from "../api/updateTutorialCapacity";
+import {RecordReservation} from "../api/recordReservation";
 import { LoginStatus } from "../../login/api/loginStatus";
 
 export default function TutorialDetails() {
@@ -98,6 +99,7 @@ export default function TutorialDetails() {
   
     try {
       await UpdateTutorialCapacity(tutorial.tutorial_id); //reduces capacity by 1
+      await RecordReservation(user.user_id, tutorial.tutorial_id);
       alert(`You have confirmed a reservation for the tutorial: ${tutorial.tutorial_id}`);
     } catch (error) {
       console.log(error);
