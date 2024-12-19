@@ -1,3 +1,5 @@
+//Alexandre
+
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { GetTutorialsById } from "../api/getTutorialsById";
@@ -18,20 +20,20 @@ export default function AllAppointments() {
       try {
         console.log("Fetching bookings for user:", uid);
         const response = await FetchUserBookings(uid);
-        const bookings = response.bookings; // Access the 'bookings' array from the response
+        const bookings = response.bookings; 
         console.log("Fetched Bookings:", bookings);
     
         const tutorialDetails = [];
         const courseCache = {};
         const tutorCache = {};
     
-        // Now iterate over the bookings array
+        
         for (const booking of bookings) {
-          console.log("Booking:", booking); // Log the booking object to check tutorial_id
+          console.log("Booking:", booking); 
     
           if (!booking.tutorial_id) {
             console.error("Missing tutorial_id in booking:", booking);
-            continue; // Skip this booking if no tutorial_id is available
+            continue; 
           }
     
           const tutorial = await GetTutorialByTid(booking.tutorial_id);
@@ -39,7 +41,7 @@ export default function AllAppointments() {
     
           if (!tutorial || !tutorial.course_id || !tutorial.tutor_id) {
             console.error("Missing tutorial details:", tutorial);
-            continue; // Skip this tutorial if required details are missing
+            continue;
           }
     
           tutorialDetails.push(tutorial);
