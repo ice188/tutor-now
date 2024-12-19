@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GetTutorialById } from "../api/getTutorialsById";
+import { GetTutorialsById } from "../api/getTutorialsById";
 import { GetCourseById } from "../api/getCourseById";
 import { GetTutorById } from "../api/getTutorById";
 import { FetchUserBookings } from "../api/fetchUserBookings";
 
 export default function AllAppointmentsPage() {
-  const { uid } = useParams(); // Access user id from the URL
+  const { uid } = useParams(); 
   const [tutorials, setTutorials] = useState([]);
   const [courseDetails, setCourseDetails] = useState({});
   const [tutorNames, setTutorNames] = useState({});
@@ -15,21 +15,21 @@ export default function AllAppointmentsPage() {
   useEffect(() => {
     const fetchBookingsAndDetails = async () => {
       try {
-        const bookings = await FetchUserBookings(uid); // Pass uid to fetch bookings
+        const bookings = await FetchUserBookings(uid); 
         const tutorialDetails = [];
         const courseCache = {};
         const tutorCache = {};
 
         for (const booking of bookings) {
-          const tutorial = await GetTutorialById(booking.tutorial_id);
+          const tutorial = await GetTutorialsById(booking.tutorial_id);
           tutorialDetails.push(tutorial);
 
-          // Fetch course details if not already fetched
+  
           if (!courseCache[tutorial.course_id]) {
             courseCache[tutorial.course_id] = await GetCourseById(tutorial.course_id);
           }
 
-          // Fetch tutor name if not already fetched
+
           if (!tutorCache[tutorial.tutor_id]) {
             tutorCache[tutorial.tutor_id] = await GetTutorById(tutorial.tutor_id);
           }
@@ -46,7 +46,7 @@ export default function AllAppointmentsPage() {
     };
 
     fetchBookingsAndDetails();
-  }, [uid]); // Dependency on uid to refetch when it changes
+  }, [uid]); 
 
   if (loading) {
     return <p className="text-center text-gray-500">Loading booked tutorials...</p>;

@@ -1,7 +1,7 @@
 export const FetchUserBookings = async (uid) => {
   const serverUrl = import.meta.env.VITE_SERVER_API_URL;
   const token = localStorage.getItem("token");
-  const res = await fetch(`${serverUrl}/api/bookings?user_id=${uid}`, {
+  const res = await fetch(`${serverUrl}/api/bookings/${uid}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
