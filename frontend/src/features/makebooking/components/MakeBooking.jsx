@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { addTutorial } from "../api/addTutorial";
-import { GetCourses } from "../api/getCourses"; // Reuse the existing API function
+import { GetCourses } from "../api/getCourses";
 import { useParams } from "react-router-dom";
 import { TutorLoginStatus } from "../../tutor-portal/api/tutorLoginStatus";
 import CryptoJS from "crypto-js";
 
 const tutorToken = localStorage.getItem("tutor-token");
-
 
 const MakeBookingPage = () => {
   const { tid } = useParams();
@@ -14,13 +13,17 @@ const MakeBookingPage = () => {
   const [formData, setFormData] = useState({
     tutoring_location: "",
     tutor_id: tid,
-    course_id: "", // Set from dropdown
+    course_id: "",
     capacity: "",
     tutorial_date: "",
-    session_time_start: "", // Start time
-    session_time_end: "", // End time
-    recurring: "one-time", // Default value
+    session_time_start: "",
+    session_time_end: "",
+    recurring: "one-time",
+    recurring_days: [], // Store selected days for recurring tutorials
   });
+
+  const [courses, setCourses] = useState([]);
+  const [shareableUrl, setShareableUrl] = useState("");
 
   useEffect(() => {
     if (!tutorToken) {
@@ -29,20 +32,15 @@ const MakeBookingPage = () => {
 
     const loadAuth = async () => {
       const { tutor } = await TutorLoginStatus();
-
       setTtutor(tutor);
     };
     loadAuth();
   }, []);
 
-  const [courses, setCourses] = useState([]); // Store fetched courses
-  const [shareableUrl, setShareableUrl] = useState("");
-
-  // Fetch courses on component mount
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const fetchedCourses = await GetCourses(); // Reuse the existing function
+        const fetchedCourses = await GetCourses();
         setCourses(fetchedCourses);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -53,7 +51,7 @@ const MakeBookingPage = () => {
 
   const encodeId = (id) => {
     const key = "secret-key";
-    const idString = id.toString(); // Convert the ID to a string
+    const idString = id.toString();
     return CryptoJS.AES.encrypt(idString, key).toString();
   };
 
@@ -62,12 +60,20 @@ const MakeBookingPage = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleDaySelection = (e) => {
+    const { value, checked } = e.target;
+    const updatedDays = checked
+      ? [...formData.recurring_days, value]
+      : formData.recurring_days.filter((day) => day !== value);
+    setFormData({ ...formData, recurring_days: updatedDays });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Combine start and end times intgit reset --hard f49cf3ac0a8a978980999c4f43e940f816211addo a single range
+  
+    // Combine start and end times into a single range
     const session_time = `${formData.session_time_start}-${formData.session_time_end}`;
-
+  
     // Prepare the payload
     const dataToSubmit = {
       location: formData.tutoring_location,
@@ -75,21 +81,24 @@ const MakeBookingPage = () => {
       cid: parseInt(formData.course_id),
       capacity: parseInt(formData.capacity),
       spots: parseInt(formData.capacity),
-      tutor_date: formData.tutorial_date,
+      tutor_date: formData.recurring === "one-time" 
+      ? formData.tutorial_date 
+      : formData.recurring_days.join(", "),
+    
       time: session_time,
       frequency: formData.recurring,
     };
+  
     try {
       const result = await addTutorial(dataToSubmit);
       alert(result.message || "Tutorial added successfully!");
-
-      // Generate shareable URL
+  
       const encodedId = encodeId(result.tutorial.tutorial_id);
       const hostUrl = import.meta.env.VITE_HOST_URL;
       const url = `${hostUrl}/reserve-booking/${encodeURIComponent(encodedId)}`;
-
+  
       setShareableUrl(url);
-
+  
       setFormData({
         tutoring_location: "",
         course_id: "",
@@ -98,6 +107,7 @@ const MakeBookingPage = () => {
         session_time_start: "",
         session_time_end: "",
         recurring: "one-time",
+        recurring_days: [],
       });
     } catch (error) {
       console.log(error);
@@ -122,6 +132,8 @@ const MakeBookingPage = () => {
     borderRadius: "4px",
     border: "1px solid #D1D5DB",
   };
+
+  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   return ttutor && ttutor.tutor_id.toString() === tid.toString() ? (
     <>
@@ -159,9 +171,7 @@ const MakeBookingPage = () => {
         </div>
       )}
       <div style={{ padding: "20px" }}>
-        <h2 style={{ textAlign: "center", color: "#0A2A3A" }}>
-          Add a Tutorial
-        </h2>
+        <h2 style={{ textAlign: "center", color: "#0A2A3A" }}>Add a Tutorial</h2>
         <form style={formStyle} onSubmit={handleSubmit}>
           <label>Tutoring Location:</label>
           <input
@@ -199,15 +209,47 @@ const MakeBookingPage = () => {
             required
           />
 
-          <label>Scheduled Date:</label>
-          <input
-            type="date"
-            name="tutorial_date"
-            value={formData.tutorial_date}
+          <label>Recurring:</label>
+          <select
+            name="recurring"
+            value={formData.recurring}
             onChange={handleInputChange}
             style={inputStyle}
             required
-          />
+          >
+            <option value="one-time">One-Time</option>
+            <option value="recurring">Recurring</option>
+          </select>
+
+          {formData.recurring === "one-time" ? (
+            <>
+              <label>Scheduled Date:</label>
+              <input
+                type="date"
+                name="tutorial_date"
+                value={formData.tutorial_date}
+                onChange={handleInputChange}
+                style={inputStyle}
+                required
+              />
+            </>
+          ) : (
+            <>
+              <label>Select Days of the Week:</label>
+              {daysOfWeek.map((day) => (
+                <div key={day}>
+                  <input
+                    type="checkbox"
+                    id={day}
+                    value={day}
+                    checked={formData.recurring_days.includes(day)}
+                    onChange={handleDaySelection}
+                  />
+                  <label htmlFor={day}>{day}</label>
+                </div>
+              ))}
+            </>
+          )}
 
           <label>Session Start Time:</label>
           <input
@@ -228,18 +270,6 @@ const MakeBookingPage = () => {
             style={inputStyle}
             required
           />
-
-          <label>Recurring:</label>
-          <select
-            name="recurring"
-            value={formData.recurring}
-            onChange={handleInputChange}
-            style={inputStyle}
-            required
-          >
-            <option value="one-time">One-Time</option>
-            <option value="recurring">Recurring</option>
-          </select>
 
           <button
             type="submit"
