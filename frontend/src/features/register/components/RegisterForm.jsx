@@ -1,3 +1,4 @@
+//Alice Chu, 261014447
 import { useState } from "react";
 import { Register } from "../api/register";
 import { useNavigate } from "react-router-dom";
