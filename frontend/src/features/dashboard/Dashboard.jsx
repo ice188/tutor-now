@@ -1,3 +1,4 @@
+//Yusuf Hamza 261089856
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -28,6 +29,7 @@ const Dashboard = () => {
     loadAuth();
   }, [token]);
 
+ //formatting output buttons with navigate to redirect to appropriate pages
   return user && uid === user.user_id.toString() ? (
     <div
       style={{
