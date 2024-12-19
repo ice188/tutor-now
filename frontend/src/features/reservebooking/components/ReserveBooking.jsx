@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; 
 import { GetTutorialByTid } from "../api/getTutorialByTid";
 import { GetCourseById } from "../api/getCourseById";
 import { GetTutorById } from "../api/getTutorById";
 import CryptoJS from "crypto-js";
-import {UpdateTutorialCapacity} from "../api/updateTutorialCapacity";
-import {RecordReservation} from "../api/recordReservation";
+import { UpdateTutorialCapacity } from "../api/updateTutorialCapacity";
+import { RecordReservation } from "../api/recordReservation";
 import { LoginStatus } from "../../login/api/loginStatus";
 
 export default function TutorialDetails() {
@@ -17,6 +17,8 @@ export default function TutorialDetails() {
   const [tutor, setTutor] = useState(null);
   const token = localStorage.getItem("token");
 
+  const navigate = useNavigate(); 
+
   useEffect(() => {
     if (!token) {
       return;
@@ -24,7 +26,6 @@ export default function TutorialDetails() {
 
     const loadAuth = async () => {
       const { user } = await LoginStatus();
-
       setUser(user);
     };
     loadAuth();
@@ -55,7 +56,6 @@ export default function TutorialDetails() {
       return;
     }
   
-    //convert decrypted ID to an int so it can be used in api call
     const tutorialId = parseInt(decryptedId.trim(), 10);
     if (isNaN(tutorialId)) {
       console.error("Decrypted ID is not a valid number.");
@@ -67,8 +67,8 @@ export default function TutorialDetails() {
     const fetchTutorialDetails = async () => {
       try {
         const fetchedTutorial = await GetTutorialByTid(tutorialId); 
-        console.log("Fetched tutorial:", fetchedTutorial); //logging for testing purposes
-  3
+        console.log("Fetched tutorial:", fetchedTutorial); 
+        
         if (fetchedTutorial.length === 0) {
           console.error("Tutorial not found.");
           return;
@@ -101,11 +101,14 @@ export default function TutorialDetails() {
       await UpdateTutorialCapacity(tutorial.tutorial_id); //reduces capacity by 1
       await RecordReservation(user.user_id, tutorial.tutorial_id);
       alert(`You have confirmed a reservation for the tutorial: ${tutorial.tutorial_id}`);
+      
+      navigate(`/${user.user_id}/dashboard`); //redirect to dashboard after confirming
     } catch (error) {
       console.log(error);
       alert("Failed to confirm reservation. Please try again later.");
     }
   };
+
   if (!tutorial || !course || !tutor) {
     return <p>Loading tutorial details...</p>; 
   }
