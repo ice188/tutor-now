@@ -44,7 +44,7 @@ const Dashboard = () => {
       </button>
       <button
         className="bg-blue-950 text-white px-5 py-3 font-semibold rounded-md cursor-pointer hover:bg-blue-700 w-80" // Width set to 80 (tailwind's w-80)
-        onClick={() => navigate(`/${uid}/availability-request`)}
+        onClick={() => navigate(`/${uid}/all-appointments`)}
       >
         View Appointments
       </button>

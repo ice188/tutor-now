@@ -8,6 +8,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { MakeBookingPage } from "./pages/MakeBookingPage";
 import { ReserveBookingPage } from "./pages/ReserveBookingPage";
 import { TutorLoginPage } from "./pages/TutorLoginPage";
+import { AllAppointmentsPage } from "./pages/AllAppointmentsPage";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/:tid/make-booking" element= {<MakeBookingPage />} />
         <Route path="/reserve-booking/:encodedId" element= {<ReserveBookingPage />} />
         <Route path="/tutor-login" element= {<TutorLoginPage />} />
+        <Route path="/:uid/all-appointments" element= {<AllAppointmentsPage />} />
       </Routes>
     </Router>
   );
