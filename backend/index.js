@@ -7,6 +7,7 @@ const userRoutes = require('./src/routes/user.route');
 const tutorRoutes = require('./src/routes/tutor.route');
 const courseRoutes = require('./src/routes/course.route')
 const tutorialRoutes = require('./src/routes/tutorial.route')
+const bookingRoutes = require('./src/routes/booking.route')
 const errorHandler = require('./src/middlewares/errorHandler');
 
 app.use(express.json()); 
@@ -19,6 +20,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/tutor', tutorRoutes);
 app.use('/api/course', courseRoutes);
 app.use('/api/tutorial', tutorialRoutes);
+app.use('/api/booking', bookingRoutes);
 app.use(errorHandler);
 
 if (process.env.NODE_ENV !== 'test') {

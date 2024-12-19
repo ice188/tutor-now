@@ -32,3 +32,11 @@ CREATE TABLE tutorials (
     FOREIGN KEY (tutor_id) REFERENCES tutors(tutor_id),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
+
+CREATE TABLE bookings (
+    booking_id SERIAL PRIMARY KEY,
+    user_id INT,
+    tutorial_id INT NOT NULL,
+    FOREIGN KEY (tutorial_id) REFERENCES tutorials(tutorial_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
