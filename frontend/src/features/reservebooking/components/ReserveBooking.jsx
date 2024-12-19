@@ -52,7 +52,7 @@ export default function TutorialDetails() {
       try {
         const fetchedTutorial = await GetTutorialsById(tutorialId); // Use the integer ID
         console.log("Fetched tutorial:", fetchedTutorial); // Log the fetched tutorial data
-  
+  3
         if (fetchedTutorial.length === 0) {
           console.error("Tutorial not found.");
           return;
