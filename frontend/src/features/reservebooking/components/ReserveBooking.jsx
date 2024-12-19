@@ -83,7 +83,7 @@ export default function TutorialDetails() {
     };
   
     fetchTutorialDetails();
-  }, [decodedId]); 
+  }, [decodedId, encodedId]); 
   
   const handleConfirmReservation = async () => {
     if (!tutorial) {
