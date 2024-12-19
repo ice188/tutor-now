@@ -33,7 +33,7 @@ export default function PrivateHeader() {
         aria-label="Global"
         className="mx-auto border-b shadow-md flex pr-16 items-center justify-between p-3 pl-8 lg:px-8"
       >
-        <div className="flex lg:flex-1 items-center justify-center">
+        <div className="flex lg:flex-1 items-center justify-start">
           <a href="/" className="-m-1.5">
             <span className="sr-only">Tutor Now</span>
             <img alt="Tutor Now Logo" src="/logo.png" className="h-16 w-auto" />
