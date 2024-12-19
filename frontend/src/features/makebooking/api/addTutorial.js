@@ -1,7 +1,8 @@
 export const addTutorial = async (tutorialData) => {
   try {
     console.log(JSON.stringify(tutorialData));
-    const response = await fetch("http://localhost:5000/api/tutorial", {
+    const serverUrl = import.meta.env.VITE_SERVER_API_URL;
+    const response = await fetch(`${serverUrl}/api/tutorial`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
