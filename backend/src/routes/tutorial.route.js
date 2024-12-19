@@ -7,7 +7,8 @@ const asyncHandler = require("express-async-handler");
 router.post(
   "/",
   asyncHandler(async (req, res) => {
-    let { location, tid, cid, capacity, spots, time, tutor_date, frequency } = req.body;
+    let { location, tid, cid, capacity, spots, time, tutor_date, frequency } =
+      req.body;
 
     const newTutorial = await pool.query(
       "INSERT INTO tutorials (tutoring_location, tutor_id, course_id, capacity, spots_remaining, session_time, tutor_date, frequency) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
@@ -29,7 +30,7 @@ router.get(
 //3. get tutorials by course id
 router.get(
   "/:id",
-  
+
   asyncHandler(async (req, res) => {
     const { id } = req.params;
     const tutorials = await pool.query(
@@ -44,31 +45,28 @@ router.get(
 router.put(
   "/:id/decrement-capacity",
   asyncHandler(async (req, res) => {
-    const { id } = req.params; 
-    try {
-      const updatedTutorial = await pool.query(
-        "UPDATE tutorials SET spots_remaining = GREATEST(spots_remaining - 1, 0) WHERE id = $1 RETURNING *",
-        [id]
-      );
+    const { id } = req.params;
 
-      if (updatedTutorial.rowCount === 0) {
-        return res.status(404).json({ message: "Tutorial not found" });
-      }
-      res.json({
-        message: "Capacity decremented successfully",
-        tutorial: updatedTutorial.rows[0],
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "An error occurred", error });
+    const updatedTutorial = await pool.query(
+      "UPDATE tutorials SET spots_remaining = GREATEST(spots_remaining - 1, 0) WHERE tutorial_id = $1 RETURNING *",
+      [id]
+    );
+
+    if (updatedTutorial.rowCount === 0) {
+      return res.status(404).json({ message: "Tutorial not found" });
     }
+    res.json({
+      message: "Capacity decremented successfully",
+      tutorial: updatedTutorial.rows[0],
+    });
+
   })
 );
 
 //5. get tutorials by tutorial id
 router.get(
   "/get-by-tid/:id",
-  
+
   asyncHandler(async (req, res) => {
     const { id } = req.params;
     const tutorial = await pool.query(

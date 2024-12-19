@@ -5,6 +5,7 @@ import { GetCourseById } from "../api/getCourseById";
 import { GetTutorById } from "../api/getTutorById";
 import CryptoJS from "crypto-js";
 import {UpdateTutorialCapacity} from "../api/updateTutorialCapacity";
+import { LoginStatus } from "../../login/api/loginStatus";
 
 export default function TutorialDetails() {
   const { encodedId } = useParams(); 
@@ -12,9 +13,21 @@ export default function TutorialDetails() {
   const [tutorial, setTutorial] = useState(null);
   const [course, setCourse] = useState(null);
   const [tutor, setTutor] = useState(null);
-  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-  
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    const loadAuth = async () => {
+      const { user } = await LoginStatus();
+
+      setUser(user);
+    };
+    loadAuth();
+  }, [token]);
+
   const decryptId = (encryptedId) => {
     const key = "secret-key"; 
     try {
@@ -85,8 +98,8 @@ export default function TutorialDetails() {
     try {
       await UpdateTutorialCapacity(tutorial.tutorial_id); //reduces capacity by 1
       alert(`You have confirmed a reservation for the tutorial: ${tutorial.tutorial_id}`);
-      navigate("/dashboard");
     } catch (error) {
+      console.log(error);
       alert("Failed to confirm reservation. Please try again later.");
     }
   };
