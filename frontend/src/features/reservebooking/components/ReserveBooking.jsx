@@ -4,18 +4,19 @@ import { GetTutorialByTid } from "../api/getTutorialByTid";
 import { GetCourseById } from "../api/getCourseById";
 import { GetTutorById } from "../api/getTutorById";
 import CryptoJS from "crypto-js";
+import {UpdateTutorialCapacity} from "../api/updateTutorialCapacity";
 
 export default function TutorialDetails() {
-  const { encodedId } = useParams(); // Get the encrypted tutorial ID from the URL
-  const decodedId = decodeURIComponent(encodedId); // Decode the URL-encoded ID
+  const { encodedId } = useParams(); 
+  const decodedId = decodeURIComponent(encodedId); 
   const [tutorial, setTutorial] = useState(null);
   const [course, setCourse] = useState(null);
   const [tutor, setTutor] = useState(null);
   const navigate = useNavigate();
 
-  // Decrypt the tutorial ID from the URL
+  
   const decryptId = (encryptedId) => {
-    const key = "secret-key"; // Use the same key as in encryption
+    const key = "secret-key"; 
     try {
       const bytes = CryptoJS.AES.decrypt(encryptedId, key);
       const decryptedId = bytes.toString(CryptoJS.enc.Utf8);
@@ -31,15 +32,15 @@ export default function TutorialDetails() {
 
   useEffect(() => {
     console.log("Encoded ID from URL:", encodedId);
-    const decryptedId = decryptId(decodedId); // Decrypt the tutorial ID
-    console.log("Decrypted ID:", decryptedId); // Log the decrypted ID
+    const decryptedId = decryptId(decodedId); 
+    console.log("Decrypted ID:", decryptedId); 
   
     if (!decryptedId) {
       console.error("Invalid or failed to decrypt tutorial ID.");
       return;
     }
   
-    // Clean the decrypted ID: trim spaces and ensure it's an integer
+    //convert decrypted ID to an int so it can be used in api call
     const tutorialId = parseInt(decryptedId.trim(), 10);
     if (isNaN(tutorialId)) {
       console.error("Decrypted ID is not a valid number.");
@@ -50,14 +51,14 @@ export default function TutorialDetails() {
   
     const fetchTutorialDetails = async () => {
       try {
-        const fetchedTutorial = await GetTutorialByTid(tutorialId); // Use the integer ID
-        console.log("Fetched tutorial:", fetchedTutorial); // Log the fetched tutorial data
+        const fetchedTutorial = await GetTutorialByTid(tutorialId); 
+        console.log("Fetched tutorial:", fetchedTutorial); //logging for testing purposes
   3
         if (fetchedTutorial.length === 0) {
           console.error("Tutorial not found.");
           return;
         }
-        setTutorial(fetchedTutorial); // Assuming the tutorial is the first item in the array
+        setTutorial(fetchedTutorial);
         const fetchedCourse = await GetCourseById(fetchedTutorial.course_id);
         setCourse(fetchedCourse);
         const fetchedTutor = await GetTutorById(fetchedTutorial.tutor_id);
@@ -68,17 +69,27 @@ export default function TutorialDetails() {
     };
   
     fetchTutorialDetails();
-  }, [decodedId]); // Run this effect when the decodedId changes
+  }, [decodedId]); 
   
-  const handleConfirmReservation = () => {
-    if (tutorial) {
-      alert(`You have confirmed a reservation for the tutorial: ${tutorial.tutorial_id}`);
-      navigate("/dashboard"); 
-    } else {
+  const handleConfirmReservation = async () => {
+    if (!tutorial) {
       alert("Failed to confirm reservation. Please try again.");
+      return;
+    }
+  
+    if (tutorial.spots_remaining <= 0) {
+      alert("This tutorial is fully booked. No spots are available.");
+      return;
+    }
+  
+    try {
+      await UpdateTutorialCapacity(tutorial.tutorial_id); //reduces capacity by 1
+      alert(`You have confirmed a reservation for the tutorial: ${tutorial.tutorial_id}`);
+      navigate("/dashboard");
+    } catch (error) {
+      alert("Failed to confirm reservation. Please try again later.");
     }
   };
-
   if (!tutorial || !course || !tutor) {
     return <p>Loading tutorial details...</p>; 
   }
